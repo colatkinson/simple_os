@@ -26,8 +26,6 @@ start:
   hlt ; halt the CPU
 
 
-
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ; Multiboot header for GRUB bootloader. This must be in the first 8K
 ; of the kernel file. We use the aout kludge so it works with ELF,
@@ -48,3 +46,7 @@ mboot:
 	dd bss
 	dd end
 	dd start
+    dd 0
+    dd 1366
+    dd 768
+    dd 24
