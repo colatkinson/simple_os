@@ -1,0 +1,3 @@
+ * CMake
+ * Get a REPL-type deal going
+ * Scroll VGA

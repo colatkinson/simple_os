@@ -22,9 +22,9 @@ int extmem = 0;
 
 void set_memory()
 {
-     heap = (byte_t *)0x100000;
-     max_heap = heap + (extmem * 1024);
-     freelist = NULL;
+    heap = (byte_t *)0x100000;
+    max_heap = heap + (extmem * 1024);
+    freelist = NULL;
 }
 
 #define HEAPSIG  0xDEADBEEF
@@ -47,11 +47,11 @@ void *malloc(size_t sz)
     {
         if(current->size > sz)
         {
-              previous->next = current->next;
-              if(current == freelist)
-                  freelist = current->next;
-              current->next = NULL;
-              return (void*) ++current;
+            previous->next = current->next;
+            if(current == freelist)
+                freelist = current->next;
+            current->next = NULL;
+            return (void*) ++current;
         }
         previous = current;
         current = current->next;
