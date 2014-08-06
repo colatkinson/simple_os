@@ -32,3 +32,4 @@
 *.iso
 
 isodir/
+build/

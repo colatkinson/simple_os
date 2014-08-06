@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "serial.h"
 #define PORT 0x3f8   /* COM1 */
 
 void init_serial()

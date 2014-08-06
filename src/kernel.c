@@ -10,7 +10,7 @@
 #include "liballoc.h"
 #include "utils.h"*/
 #include "functions.h"
-#include "serial.c"
+#include "serial.h"
 #include "char_table.h"
 
 void kbd_loop(int line)
@@ -79,3 +79,4 @@ kernel_main()
 //COLOR = VGA_WHITE_BCK+VGA_BLUE_TXT;
     kbd_loop(line + 1);
 }
+
