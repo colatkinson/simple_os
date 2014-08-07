@@ -26,6 +26,3 @@ struct header
 
 void *malloc(size_t sz);
 void free(void *ptr);
-
-void delay_wait_short(unsigned int x);
-void delay_wait (unsigned int x);
