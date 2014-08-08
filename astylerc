@@ -1,6 +1,5 @@
 --style=allman
 --indent=spaces=4
---indent-namespaces
+--indent-col1-comments
 --pad-oper
 --recursive
---suffix=none

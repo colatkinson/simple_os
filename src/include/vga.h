@@ -19,9 +19,9 @@ enum colors
     VGA_WHITE_BCK = 0x70,
 };
 
-void k_clear_line(int line);
-void k_clear_screen();
-unsigned int k_printf(char *message, unsigned int line);
+void vga_clear_line(int line);
+void vga_clear_screen();
+unsigned int vga_printf(char *message, unsigned int line);
 uint16_t make_vgaentry(char c, uint8_t color);
 
 extern char COLOR;

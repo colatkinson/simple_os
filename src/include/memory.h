@@ -1,12 +1,10 @@
 #pragma once
-//#include "liballoc.h"
 #include <stddef.h>
 #include <stdint.h>
-//typedef unsigned long size_t;
 typedef unsigned char byte_t;
 
-uint8_t inb(uint16_t port);
-void outb(uint16_t port, uint8_t val);
+void *malloc(size_t sz);
+void free(void *ptr);
 
 byte_t *heap;
 byte_t *HeapCurEnd, *max_heap;
@@ -23,9 +21,3 @@ struct header
     size_t size;
     struct header *next;
 };
-
-void *malloc(size_t sz);
-void free(void *ptr);
-
-void delay_wait_short(unsigned int x);
-void delay_wait (unsigned int x);
