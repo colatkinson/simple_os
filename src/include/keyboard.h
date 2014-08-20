@@ -3,5 +3,6 @@
 #include "memory.h"
 #include "vga.h"
 #include "utils.h"
+#include "char_table.h"
 
 void kbd_loop(int line);

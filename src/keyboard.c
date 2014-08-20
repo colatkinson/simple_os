@@ -44,7 +44,7 @@ void kbd_loop(int line)
     free(message);
 }
 
-char get_key()
+/*char get_key()
 {
     unsigned char key;
     unsigned char pressed;
@@ -79,4 +79,4 @@ char get_key()
                     }
                 }
             }
-}
+}*/
