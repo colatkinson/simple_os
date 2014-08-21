@@ -1,9 +1,9 @@
-#include "sound.h"
+#include <sound.h>
 
 //Play sound using built in speaker
-void play_sound(unsigned long nFrequence)
+void play_sound(uint32 nFrequence)
 {
-    unsigned long Div;
+    uint64 Div;
     unsigned char tmp;
 
     //Set the PIT to the desired frequency
@@ -35,5 +35,4 @@ void beep()
     // wait for one second
     delay_ms(1000);
     nosound();
-    //set_PIT_2(old_frequency);
 }

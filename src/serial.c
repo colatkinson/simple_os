@@ -1,4 +1,4 @@
-#include "serial.h"
+#include <serial.h>
 #define PORT 0x3f8   /* COM1 */
 
 void init_serial()
@@ -12,7 +12,7 @@ void init_serial()
     outb(PORT + 4, 0x0B);    // IRQs enabled, RTS/DSR set
 }
 
-int is_transmit_empty()
+int32 is_transmit_empty()
 {
     return inb(PORT + 5) & 0x20;
 }

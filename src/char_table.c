@@ -1,4 +1,4 @@
-#include "char_table.h"
+#include <char_table.h>
 
 /* Char map, with modifiers */
 
@@ -99,4 +99,4 @@ const unsigned char char_table[][4] =
     {0, 0, 0, 0}, /* F12 */
 };
 
-size_t char_table_size = sizeof(char_table);
+uint16 char_table_size = sizeof(char_table);

@@ -1,9 +1,7 @@
 #pragma once
-#include <stddef.h>
-#include <stdint.h>
-typedef unsigned char byte_t;
+#include <types.h>
 
-void *malloc(size_t sz);
+void *malloc(uint16 sz);
 void free(void *ptr);
 
 byte_t *heap;
@@ -17,7 +15,7 @@ void set_memory();
 
 struct header
 {
-    unsigned int sig;
-    size_t size;
+    uint32 sig;
+    uint16 size;
     struct header *next;
 };

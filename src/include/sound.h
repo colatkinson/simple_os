@@ -1,6 +1,6 @@
 #pragma once
-#include "utils.h"
+#include <utils.h>
 
-void play_sound(unsigned long nFrequence);
+void play_sound(uint32 nFrequence);
 void nosound();
 void beep();

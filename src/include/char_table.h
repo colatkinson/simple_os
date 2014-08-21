@@ -1,5 +1,5 @@
 #pragma once
-#include "types.h"
+#include <types.h>
 
 extern const unsigned char char_table[][4];
-extern size_t char_table_size;
+extern uint16 char_table_size;

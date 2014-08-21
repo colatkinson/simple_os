@@ -1,13 +1,10 @@
-#include "keyboard.h"
+#include <keyboard.h>
 
-void kbd_loop(int line)
+void kbd_loop(int32 line)
 {
-    unsigned char key;
-    unsigned char pressed;
     char c = 0;
     char *message = (char *)malloc(20 * sizeof(char));
-    int i = 0;
-    int j = 0;
+    int32 i = 0;
     for (;;)
     {
         if(inb(0x60) != c)

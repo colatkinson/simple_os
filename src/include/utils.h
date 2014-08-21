@@ -1,12 +1,11 @@
 #pragma once
-//#include "liballoc.h"
-#include <stddef.h>
-#include <stdint.h>
-//typedef unsigned long size_t;
-typedef unsigned char byte_t;
+#include <types.h>
 
-uint8_t inb(uint16_t port);
-void outb(uint16_t port, uint8_t val);
+uint8 inb(uint16 port);
+void outb(uint16 port, uint8 val);
 
-void delay_wait_short(unsigned int x);
-void delay_wait (unsigned int x);
+char * itoa(int32 value, char *str, int32 base);
+
+void delay_wait_short(uint32 x);
+void delay_wait (uint32 x);
+void delay_ms (uint32 x);

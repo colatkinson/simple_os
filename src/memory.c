@@ -1,4 +1,4 @@
-#include "memory.h"
+#include <memory.h>
 
 void set_memory()
 {
@@ -7,7 +7,7 @@ void set_memory()
     freelist = NULL;
 }
 
-void *malloc(size_t sz)
+void *malloc(uint16 sz)
 {
     if(!sz)
         return NULL;

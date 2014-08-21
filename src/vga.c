@@ -1,11 +1,11 @@
-#include "vga.h"
+#include <vga.h>
 
 char COLOR = VGA_BLUE_BCK + VGA_WHITE_TXT;
 
 void vga_clear_screen() // clear the entire text screen
 {
     char *vidmem = (char *) 0xb8000;
-    unsigned int i = 0;
+    uint32 i = 0;
     while(i < (VGA_WIDTH * VGA_HEIGHT * 2))
     {
         vidmem[i] = ' ';
@@ -18,7 +18,7 @@ void vga_clear_screen() // clear the entire text screen
 void vga_clear_line(int line) // clear the entire text screen
 {
     char *vidmem = (char *) 0xb8000;
-    unsigned int i = line * VGA_WIDTH * 2;
+    uint32 i = line * VGA_WIDTH * 2;
     while(i < (line + 1)*VGA_WIDTH * 2)
     {
         vidmem[i] = ' ';
@@ -28,24 +28,24 @@ void vga_clear_line(int line) // clear the entire text screen
     };
 };
 
-uint16_t make_vgaentry(char c, uint8_t color)
+uint16 make_vgaentry(char c, uint8 color)
 {
-    uint16_t c16 = c;
-    uint16_t color16 = color;
+    uint16 c16 = c;
+    uint16 color16 = color;
     return c16 | color16 << 8;
 }
 
-unsigned int vga_putchar(char c, uint8_t color, size_t x, size_t y)
+void vga_putchar(char c, uint8 color, uint16 x, uint16 y)
 {
     char *vidmem = (char *) 0xb8000;
-    size_t i = y * VGA_WIDTH + x;
+    uint16 i = y * VGA_WIDTH + x;
     vidmem[i] = c;
     i++;
     vidmem[i] = color;
     i++;
 }
 
-unsigned int vga_printf(char *message, unsigned int line) // the message and then the line #
+uint32 vga_printf(char *message, uint32 line) // the message and then the line #
 {
     char *vidmem = (char *) 0xb8000;
     unsigned int i = 0;

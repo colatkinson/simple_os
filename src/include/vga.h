@@ -1,13 +1,11 @@
 #pragma once
-
-#include <stddef.h>
-#include <stdint.h>
+#include <types.h>
 
 #define WHITE_TXT 0x07 // white on black text
 #define WHITE_BCK 0x70
 
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
+static const uint16 VGA_WIDTH = 80;
+static const uint16 VGA_HEIGHT = 25;
 
 enum colors
 {
@@ -19,9 +17,9 @@ enum colors
     VGA_WHITE_BCK = 0x70,
 };
 
-void vga_clear_line(int line);
+void vga_clear_line(int32 line);
 void vga_clear_screen();
-unsigned int vga_printf(char *message, unsigned int line);
-uint16_t make_vgaentry(char c, uint8_t color);
+uint32 vga_printf(char *message, uint32 line);
+uint16 make_vgaentry(char c, uint8 color);
 
 extern char COLOR;

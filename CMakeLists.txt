@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 2.8.0)
 project(smokeos C ASM)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32 -Wall")
 set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
 
 # Grab all of the C files in src; store in C_SRCS
