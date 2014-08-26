@@ -2,7 +2,7 @@
 
 void kbd_loop(int32 line)
 {
-    char c = 0;
+    unsigned char c = 0;
     char *message = (char *)malloc(20 * sizeof(char));
     int32 i = 0;
     int8 shift = 0;
@@ -11,19 +11,16 @@ void kbd_loop(int32 line)
         if(inb(0x60) != c)
         {
             c = inb(0x60);
-            char buffer[20];
-            itoa(c,buffer,10);   // here 2 means binary
-            vga_printf(buffer, 0);
             if(c & 0x80)
             {
-                if(c == -86)
+                if(c == 0xAA)
                 {
                     shift = 0;
                 }
             }
             else
             {
-                if(c == 42)
+                if(c == 0x2A)
                 {
                     shift = 1;
                 }
