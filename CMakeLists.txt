@@ -21,8 +21,16 @@ if(${PLATFORM} STREQUAL "x86")
 elseif(${PLATFORM} STREQUAL "gba")
     CMAKE_FORCE_C_COMPILER(arm-none-eabi-gcc GNU)
     set(PREFIX "arm-none-eabi-")
-    set(CMAKE_C_FLAGS "")
-    set(LD_OPTS "-nostdlib")
+    SET (CMAKE_ASM_COMPILE_OBJECT "arm-none-eabi-gcc <FLAGS> -c -o <OBJECT> <SOURCE>") 
+    set(CMAKE_C_FLAGS "-Os")
+    set(LD_OPTS "-nostdlib -specs gba.specs")
+    SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
+elseif(${PLATFORM} STREQUAL "sparc")
+    CMAKE_FORCE_C_COMPILER(sparc64-linux-gnu-gcc GNU)
+    set(PREFIX "sparc64-linux-gnu-")
+    SET (CMAKE_ASM_COMPILE_OBJECT "sparc64-linux-gnu-gcc <FLAGS> -c -o <OBJECT> <SOURCE>") 
+    set(CMAKE_C_FLAGS "-fno-builtin -nostdlib")
+    set(LD_OPTS "-nostdlib -T sparcboot.ld")
     SET(CMAKE_SHARED_LIBRARY_LINK_C_FLAGS)
 endif()
 
@@ -33,8 +41,6 @@ include_directories(${CMAKE_SOURCE_DIR}/src/include/ ${CMAKE_SOURCE_DIR}/src/${P
 
 add_library(A OBJECT ${C_SRCS})
 add_library(B OBJECT ${CMAKE_SOURCE_DIR}/src/${PLATFORM}/boot.s)
-
-message(${C_SRCS})
 
 # Note how we obtain this variable's value!
 add_executable(kernel $<TARGET_OBJECTS:B> $<TARGET_OBJECTS:A>)

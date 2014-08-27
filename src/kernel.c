@@ -5,9 +5,10 @@
 #include <sound.h>
 #include <memory.h>
 #include <keyboard.h>
+#include <music.h>
 //#include <u_vga16.h>
 
-void kernel_main();
+//void kernel_main();
 
 int main()
 {
@@ -26,7 +27,7 @@ int main()
 //unsigned char *double_buffer = (unsigned char *) malloc(320*200);
 
 
-static void demo_graphics(void)
+/*static void demo_graphics(void)
 {
     //printf("Screen-clear in 16-color mode will be VERY SLOW\n"
         //"Press a key to continue\n");
@@ -56,7 +57,7 @@ static void demo_graphics(void)
     g_ht = 200;
     g_write_pixel = write_pixel8x;
     //draw_x();*/
-}
+//}
 
 void kernel_main()
 {
@@ -79,14 +80,44 @@ void kernel_main()
     //drawchar('A', 10, 10, 0x4, 0x0);
     //draw_char(__font_bitmap__);
     //demo_graphics();
+    //memset(double_buffer, 0, 640*480);
     init_graphics();
-    //g_write_pixel(100, 100, 15);
-    //drawchar('a', 80, 80, FG, BG);
+    
+    /*g_write_pixel(80, 80, 15);
+    g_write_pixel(80, 81, 15);
+    g_write_pixel(80, 82, 15);
+    g_write_pixel(80, 83, 15);
+    g_write_pixel(80, 84, 15);
+    g_write_pixel(80, 85, 15);
+    g_write_pixel(80, 86, 15);
+    g_write_pixel(80, 87, 15);
+    //drawchar('w', 100, 100, 9, 15);*/
     int32 line = vga_printf(intro_txt, 0);
 
-    beep();
+    //memcpy(get_fb_seg(), double_buffer, 640*480*4);
+
+    //memcpy(get_fb_seg(), double_buffer, 640*480*2);
+    //memcpy(get_fb_seg(), double_buffer, 640*480);
+
+    //beep();
+    init_music(120);
+    play_note(E4, 1.0);
+    play_note(E4, 1);
+    play_note(F4, 1);
+    play_note(G4, 1);
+    play_note(G4, 1);
+    play_note(F4, 1);
+    play_note(E4, 1);
+    play_note(D4, 1);
+    play_note(C4, 1);
+    play_note(C4, 1);
+    play_note(D4, 1);
+    play_note(E4, 1);
+    play_note(E4, 1.5);
+    play_note(D4, 0.5);
+    play_note(D4, 2);
     kbd_loop(line + 1);
-    //g_write_pixel(100, 100, 1);
+    //g_write_pixel(100, 100, 1);*/
 
     while(true);
 }

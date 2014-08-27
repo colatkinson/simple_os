@@ -1,5 +1,5 @@
 #include <vga.h>
-#define RGB16( r, g, b ) ( ( r << 10 ) | ( g << 5 ) | ( b ) )
+#define RGB16(r,g,b)  ((r)+(g<<5)+(b<<10)) 
 
 unsigned short colors[] = {
     RGB16(0, 0, 0),    //Black
@@ -26,8 +26,8 @@ void g_write_pixel(unsigned x, unsigned y, unsigned c)
     /*((unsigned short*)0x06000000)[115+80*240] = RGB16(255, 0, 0);
     ((unsigned short*)0x06000000)[120+80*240] = 0x03E0;
     ((unsigned short*)0x06000000)[125+80*240] = 0x7C00;*/
-    //((unsigned short*)0x06000000)[x+y*240] = RGB16(128, 128, 255);
-    ((unsigned short*)0x06000000)[x+y*240] = RGB16(c*10, c*10, c*10);
+    //((unsigned short*)0x06000000)[x+y*240] = RGB16(30, 0, 0);
+    ((unsigned short*)0x06000000)[x+y*240] = RGB16(c, c, c);
 }
 
 void vga_clear_screen() // clear the entire text screen
@@ -51,43 +51,59 @@ void init_graphics(void)
     vga_clear_screen();
 }
 
-char *a[] = {
+char a[8][8] = {
     "........",
+    "..    ..",
+    "..    ..",
+    "..    ..",
+    "..    ..",
+    "..    ..",
     "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
-    "........",
+    "........"
 };
+
+/*void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor)
+{
+    int cx,cy;
+    int mask[8]={1,2,4,8,16,32,64,128};
+    int set;
+    unsigned char *glyph=((char*)vincent_data)+(int)(c)*8;
+    //unsigned char *glyph=((unsigned char*)font8x8_basic)+(int)(c);
+    //char *glyph = font8x8_basic[(int)c];
+ 
+    for(cy=0;cy<8;cy++){
+        for(cx=0;cx<8;cx++){
+            //if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
+            g_write_pixel(x-cx, y+cy-12, fgcolor);
+            //if(a[cy][cx] == '.') g_write_pixel(x-cx,y+cy-12,fgcolor);
+        }
+    }
+    /for (cx=0; cx < 8; cx++) {
+        for (cy=0; cy < 8; cy++) {
+            set = glyph[cx] & 1 << cy;
+            g_write_pixel(x-cx, y+cy-12, set?fgcolor:bgcolor);
+            //if(a[cy][cx] == '.') g_write_pixel(x-cx, y+cy-12, fgcolor);
+        }
+    }*
+}*/
 
 void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor)
 {
     int cx,cy;
     int mask[8]={1,2,4,8,16,32,64,128};
-    unsigned char *glyph=((unsigned char*)__font_bitmap__)+(int)(c-31)*16;
+    unsigned char *glyph=((unsigned char*)vincent_data)+(int)(c)*8;
  
-    for(cy=0;cy<16;cy++){
+    for(cy=0;cy<8;cy++){
         for(cx=0;cx<8;cx++){
-            //if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
+            if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
             //g_write_pixel(x-cx, y+cy-12, glyph[cy]&mask[cx]?fgcolor:bgcolor);
-            if(a[cy][cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
         }
     }
 }
 
 void vga_putchar(char c, int row, int col)
 {
-    drawchar(c, col*8+8, row*16+12, FG, BG);
+    drawchar(c, col*8+8, row*8+12, FG, BG);
 }
 
 uint32 vga_printf(char *message, uint32 line) // the message and then the line #
