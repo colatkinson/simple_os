@@ -10,18 +10,18 @@
 
 //void kernel_main();
 
-int main()
+/*int main()
 {
     /**(unsigned int*)0x04000000 = 0x0403;
  
     ((unsigned short*)0x06000000)[115+80*240] = 0x001F;
     ((unsigned short*)0x06000000)[120+80*240] = 0x03E0;
-    ((unsigned short*)0x06000000)[125+80*240] = 0x7C00;*/
+    ((unsigned short*)0x06000000)[125+80*240] = 0x7C00;*
 
     kernel_main();
  
     return 0;
-}
+}*/
 
 //unsigned char *double_buffer;
 //unsigned char *double_buffer = (unsigned char *) malloc(320*200);
@@ -90,8 +90,8 @@ void kernel_main()
     g_write_pixel(80, 84, 15);
     g_write_pixel(80, 85, 15);
     g_write_pixel(80, 86, 15);
-    g_write_pixel(80, 87, 15);
-    //drawchar('w', 100, 100, 9, 15);*/
+    g_write_pixel(80, 87, 15);*/
+    //drawchar('w', 100, 100, 9, 15);
     int32 line = vga_printf(intro_txt, 0);
 
     //memcpy(get_fb_seg(), double_buffer, 640*480*4);
@@ -100,7 +100,7 @@ void kernel_main()
     //memcpy(get_fb_seg(), double_buffer, 640*480);
 
     //beep();
-    init_music(120);
+    /*init_music(120);
     play_note(E4, 1.0);
     play_note(E4, 1);
     play_note(F4, 1);
@@ -115,7 +115,7 @@ void kernel_main()
     play_note(E4, 1);
     play_note(E4, 1.5);
     play_note(D4, 0.5);
-    play_note(D4, 2);
+    play_note(D4, 2);*/
     kbd_loop(line + 1);
     //g_write_pixel(100, 100, 1);*/
 

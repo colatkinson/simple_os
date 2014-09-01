@@ -1,5 +1,6 @@
 #pragma once
 #include <types.h>
+//#include <string.h>
 
 void *malloc(uint16 sz);
 void free(void *ptr);
@@ -12,6 +13,10 @@ extern int extmem;
 #define HEAPSIG  0xDEADBEEF
 
 void set_memory();
+
+unsigned char *memcpy(unsigned const char *src, unsigned char *dest, int count);
+unsigned char *memset(unsigned char *dest, unsigned char val, int count);
+unsigned short *memsetw(unsigned short *dest, unsigned short val, int count);
 
 struct header
 {

@@ -95,8 +95,8 @@ void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor)
  
     for(cy=0;cy<8;cy++){
         for(cx=0;cx<8;cx++){
-            if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
-            //g_write_pixel(x-cx, y+cy-12, glyph[cy]&mask[cx]?fgcolor:bgcolor);
+            //if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
+            g_write_pixel(x-cx, y+cy-8, glyph[cy]&mask[cx]?fgcolor:bgcolor);
         }
     }
 }
@@ -111,11 +111,14 @@ uint32 vga_printf(char *message, uint32 line) // the message and then the line #
     int x = 0;
     while(*message != 0)
     {
-        if(*message == '\n' || x>=g_wd) // check for a new line
+        if(*message == '\n' || x>=g_wd/8) // check for a new line
         {
             line++;
             x = 0;
-            *message++;
+            if(*message == '\n')
+            {
+                *message++;
+            }
         }
         else
         {

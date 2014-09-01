@@ -1,6 +1,6 @@
 #include <utils.h>
 
-int extmem = 0;
+int extmem = 1;
 
 uint8 inb(uint16 port)
 {

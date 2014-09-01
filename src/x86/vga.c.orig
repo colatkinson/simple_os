@@ -277,15 +277,10 @@ uint32 vga_printf(char *message, uint32 line) // the message and then the line #
     int x = 0;
     while(*message != 0)
     {
-        if(*message == '\n' || x>=g_wd/8) // check for a new line
+        if(*message == '\n' || x>=g_wd) // check for a new line
         {
             line++;
             x = 0;
-            if(*message != '\n')
-            {
-                vga_putchar(*message, line, x);
-                x++;
-            }
             *message++;
         }
         else
@@ -305,11 +300,6 @@ void init_graphics(void)
     g_wd = 640;
     g_ht = 480;
     g_write_pixel = write_pixel4p;
-
-    /*write_regs(g_320x200x256);
-    g_wd = 320;
-    g_ht = 200;
-    g_write_pixel = write_pixel8;*/
 
     vga_clear_screen();
 }

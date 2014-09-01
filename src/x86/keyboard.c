@@ -31,30 +31,18 @@ void kbd_loop(int32 line)
                         message[i] = 0;
                         i--;
                         message[i] = ' ';
-                        vga_printf(message, line);
-                    }
-                    else if(i*8 >= 640)
-                    {
-                        i = 0;
-                        line++;
-                        message[0] = char_table[c][shift];
-                        i++;
-                        message[i] = 0;
-                        vga_printf(message, line);
-                    }
-                    else if(char_table[c][shift] == '\n')
-                    {
-                        line++;
-                        message[0] = 0;
-                        i = 0;
+                        //vga_printf(message, line);
                     }
                     else
                     {
                         message[i] = char_table[c][shift];
                         i++;
                         message[i] = 0;
-                        vga_printf(message, line);
+                        //vga_printf(message, line);
                     }
+                    //message[i] = 0;
+                    //message[i+1] = 0;
+                    vga_printf(message, line);
                 }
             }
         }
