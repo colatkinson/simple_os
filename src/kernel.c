@@ -8,18 +8,19 @@
 #include <music.h>
 //#include <u_vga16.h>
 
-//void kernel_main();
+void kernel_main();
 
 /*int main()
 {
-    /**(unsigned int*)0x04000000 = 0x0403;
- 
-    ((unsigned short*)0x06000000)[115+80*240] = 0x001F;
-    ((unsigned short*)0x06000000)[120+80*240] = 0x03E0;
-    ((unsigned short*)0x06000000)[125+80*240] = 0x7C00;*
+    *(unsigned int*)0x04000000 = 0x0403;
+
+    ((unsigned short*)0x06000000)[115 + 80 * 240] = 0x001F;
+    ((unsigned short*)0x06000000)[120 + 80 * 240] = 0x03E0;
+    ((unsigned short*)0x06000000)[125 + 80 * 240] = 0x7C00;
 
     kernel_main();
- 
+    while(1);
+
     return 0;
 }*/
 
@@ -33,30 +34,30 @@
         //"Press a key to continue\n");
     //getch();
 /* 4-color */
-    /*write_regs(g_320x200x4);
-    g_wd = 320;
-    g_ht = 200;
-    g_write_pixel = write_pixel2;*/
-    //draw_x();
+/*write_regs(g_320x200x4);
+g_wd = 320;
+g_ht = 200;
+g_write_pixel = write_pixel2;*/
+//draw_x();
 /* 16-color */
-    /*write_regs(g_640x480x16);
-    g_wd = 640;
-    g_ht = 480;
-    g_write_pixel = write_pixel4p;*/
-    //draw_x();
-    //g_write_pixel(100, 100, 1);
+/*write_regs(g_640x480x16);
+g_wd = 640;
+g_ht = 480;
+g_write_pixel = write_pixel4p;*/
+//draw_x();
+//g_write_pixel(100, 100, 1);
 /* 256-color */
-    /*write_regs(g_320x200x256);
-    g_wd = 320;
-    g_ht = 200;
-    g_write_pixel = write_pixel8;
-    //draw_x();*/
+/*write_regs(g_320x200x256);
+g_wd = 320;
+g_ht = 200;
+g_write_pixel = write_pixel8;
+//draw_x();*/
 /* 256-color Mode-X */
-    /*write_regs(g_320x200x256_modex);
-    g_wd = 320;
-    g_ht = 200;
-    g_write_pixel = write_pixel8x;
-    //draw_x();*/
+/*write_regs(g_320x200x256_modex);
+g_wd = 320;
+g_ht = 200;
+g_write_pixel = write_pixel8x;
+//draw_x();*/
 //}
 
 void kernel_main()
@@ -82,7 +83,7 @@ void kernel_main()
     //demo_graphics();
     //memset(double_buffer, 0, 640*480);
     init_graphics();
-    
+
     /*g_write_pixel(80, 80, 15);
     g_write_pixel(80, 81, 15);
     g_write_pixel(80, 82, 15);

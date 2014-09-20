@@ -33,3 +33,5 @@
 
 isodir/
 build/
+*.orig
+*.new

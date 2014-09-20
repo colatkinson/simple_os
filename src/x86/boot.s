@@ -5,18 +5,6 @@
 .set MAGIC,    0x1BADB002       # 'magic number' lets bootloader find the header
 .set CHECKSUM, -(MAGIC + FLAGS) # checksum of above, to prove we are multiboot
 
-
-mode13h:
-    movb    $0,%ah
-    movb $0x13,%al
-    int $0x10
-    ret
-
-getMode: 
-    movb $0xf,%ah
-    int $0x10
-    ret
-
 # Declare a header as in the Multiboot Standard. We put this into a special
 # section so we can force the header to be in the start of the final program.
 # You don't need to understand all these details as it is just magic values that
@@ -27,9 +15,6 @@ getMode:
 .long MAGIC
 .long FLAGS
 .long CHECKSUM
-.long 0, 0, 0, 0, 0
-.long 0 # 0 = set graphics mode
-.long 1024, 768, 32 # Width, height, depth
 
 # Currently the stack pointer register (esp) points at anything and using it may
 # cause massive harm. Instead, we'll provide our own stack. We will allocate
@@ -44,14 +29,10 @@ stack_top:
 # bootloader will jump to this position once the kernel has been loaded. It
 # doesn't make sense to return from this function as the bootloader is gone.
 .section .text
+
 .global _start
 .type _start, @function
 _start:
-    #mov $0x0013, %ax
-    #int $0x10
-    #int $0x03
-    #cli                                                     # clear interrupts
-    #sti
     # Welcome to kernel mode! We now have sufficient code for the bootloader to
     # load and run our operating system. It doesn't do anything interesting yet.
     # Perhaps we would like to call printf("Hello, World\n"). You should now
@@ -75,51 +56,6 @@ _start:
     # To set up a stack, we simply set the esp register to point to the top of
     # our stack (as it grows downwards).
     movl $stack_top, %esp
-
-    #sti
-
-    #call    mode13h
-    #movl $0x07h, %bh
-    movb $0,%ah
-    movb $0x3, %al
-    #int $0x10
-    sti
-
-        #xorw            %ax,%ax                         # null segments
-
-        #movw            %ax,%ds
-
-        #movw            %ax,%es
-
-        #movw            $0x0000,%ax                     # stack begins at 0x9000-0xffff
-
-        #movw            %ax,%ss
-
-        #movw            $0xFFFF,%sp
-
-        #sti                                                     # enable interrupts
-
-
-
-        #movw            0xA000, %ax
-
-        #movw            %ax,%es
-
-        #xorl            %ebp,%ebp
-        cli
-
-
-
-# from here, es:bp=>video memory at 0xa000:0
-
-
-
-# set video mode
-
-        #call    mode13h
-        #cli
-        #int $0x10
-        #movl $0x07690748,0xb8000
 
     # We are now ready to actually execute C code. We cannot embed that in an
     # assembly file, so we'll create a kernel.c file in a moment. In that file,

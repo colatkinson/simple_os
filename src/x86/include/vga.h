@@ -33,7 +33,7 @@
 #define peekb(S,O)      *(unsigned char *)(16uL * (S) + (O))
 #define pokeb(S,O,V)        *(unsigned char *)(16uL * (S) + (O)) = (V)
 
-#define BG 9
+#define BG 0
 #define FG 15
 
 int32 g_wd;

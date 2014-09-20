@@ -14,6 +14,11 @@ void outb(uint16 port, uint8 val)
     asm volatile ( "outb %0, %1" : : "a"(val), "Nd"(port) );
 }
 
+void outw(uint16 port, uint16 val)
+{
+    asm volatile ( "outw %0, %1" : : "a"(val), "Nd"(port) );
+}
+
 char * itoa(int32 value, char *str, int32 base)
 {
     char * rc;

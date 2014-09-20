@@ -55,5 +55,5 @@ void free(void *ptr)
 
 void * memcpy ( void * destination, const void * source, size_t num )
 {
-    
+
 }
