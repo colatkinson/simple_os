@@ -60,6 +60,16 @@ g_write_pixel = write_pixel8x;
 //draw_x();*/
 //}
 
+void interrupt_0()
+{
+   vga_printf("Exception: Divide Error", 0);
+   // if we just have ring 0 tasks, we just need to halt the computer
+   // if we also had ring 3 tasks, and a ring 3 task was the cause of the
+   // exception, then we should delete the ring 3 task and continue on
+   asm volatile ("cli");
+   asm volatile ("hlt");
+};
+
 void kernel_main()
 {
     //vga_clear_screen();

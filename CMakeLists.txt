@@ -1,13 +1,17 @@
 # So CMake can tell whether or not it can process this file
 cmake_minimum_required(VERSION 2.8.0)
 INCLUDE(CMakeForceCompiler)
-project(smokeos C ASM)
+project(smokeos C)
 set(PLATFORM "x86")
 
+set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf32")
+enable_language(ASM_NASM)
+
 if(${PLATFORM} STREQUAL "x86")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32  -fno-builtin")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32  -fno-builtin -ffreestanding")
     set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
     set(LD_OPTS "-T ${PROJECT_SOURCE_DIR}/link.ld -nostartfiles")
+    set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf32")
 
     add_custom_target(iso
         COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_CURRENT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/isodir
@@ -39,15 +43,22 @@ endif()
 
 # Grab all of the C files in src; store in C_SRCS
 file(GLOB C_SRCS ${CMAKE_SOURCE_DIR}/src/*.c ${CMAKE_SOURCE_DIR}/src/${PLATFORM}/*.c)
+file(GLOB ASM_SRCS ${CMAKE_SOURCE_DIR}/src/${PLATFORM}/boot.asm)
 
 include_directories(${CMAKE_SOURCE_DIR}/src/include/ ${CMAKE_SOURCE_DIR}/src/${PLATFORM}/include/)
 
 add_library(A OBJECT ${C_SRCS})
-add_library(B OBJECT ${CMAKE_SOURCE_DIR}/src/${PLATFORM}/boot.s)
+add_library(B OBJECT ${ASM_SRCS})
 
 # Note how we obtain this variable's value!
 add_executable(kernel $<TARGET_OBJECTS:B> $<TARGET_OBJECTS:A>)
+#add_library(kernel STATIC ${ASM_SRCS} ${C_SRCS})
+#set_target_properties(kernel PROPERTIES OUTPUT_NAME "${PROJECT_NAME}.bin")
 set_target_properties(kernel PROPERTIES OUTPUT_NAME "${PROJECT_NAME}.bin" LINK_FLAGS "${LD_OPTS}")
+#ADD_CUSTOM_COMMAND (TARGET kernel
+#    POST_BUILD
+#        COMMAND "pwd"
+#        COMMAND "/usr/bin/ld -m elf_i386 ${LD_OPTS} -o smokeos.bin $<TARGET_FILE:kernel>")
 
 #set(ADDITIONAL_MAKE_CLEAN_FILES isodir ${PROJECT_NAME}.iso)
 #add_executable(kernel ${CMAKE_SOURCE_DIR}/src/kernel.c)

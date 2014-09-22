@@ -201,6 +201,8 @@ void write_pixel4p(unsigned x, unsigned y, unsigned c)
         //pokeb(*double_buffer, off, peekb(*double_buffer, off) & ~mask);
         pmask <<= 1;
     }
+    /*unsigned seg = get_fb_seg();
+    ((unsigned*)seg)[(y<<6) + (y<<4) + (x>>2)] = c;*/
 }
 
 void write_pixel2(unsigned x, unsigned y, unsigned c)
@@ -268,8 +270,8 @@ void vga_clear_screen() // clear the entire text screen
     //fillrect((unsigned char*)0xA000, 1, 1, 1, 200, 200);
     //memset(double_buffer, (short)15, 640*480*16);
     outw(0x3c4, 0xff02);
-    outb(0x3c5, 0x0f);
-    memset(get_fb_seg(), 0, 640 * 480 * 3);
+    //outb(0x3c5, 0x0f);
+    memset(get_fb_seg(), BG, 640*480*3);
 }
 
 void vga_putchar(char c, int row, int col)
