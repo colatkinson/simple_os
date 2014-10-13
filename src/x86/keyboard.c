@@ -2,9 +2,8 @@
 
 void kbd_loop(int32 line)
 {
-    int q = 1/0;
     unsigned char c = 0;
-    char *message = (char *)malloc(20 * sizeof(char));
+    char *message = (char *)malloc(100 * sizeof(char));
     int32 i = 0;
     int8 shift = 0;
     for (;;)

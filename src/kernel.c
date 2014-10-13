@@ -6,6 +6,7 @@
 #include <memory.h>
 #include <keyboard.h>
 #include <music.h>
+#include <descriptor_tables.h>
 //#include <u_vga16.h>
 
 void kernel_main();
@@ -60,18 +61,13 @@ g_write_pixel = write_pixel8x;
 //draw_x();*/
 //}
 
-void interrupt_0()
-{
-   vga_printf("Exception: Divide Error", 0);
-   // if we just have ring 0 tasks, we just need to halt the computer
-   // if we also had ring 3 tasks, and a ring 3 task was the cause of the
-   // exception, then we should delete the ring 3 task and continue on
-   asm volatile ("cli");
-   asm volatile ("hlt");
-};
-
 void kernel_main()
 {
+    //gdt_install();
+    //idt_install();
+    //isrs_install();
+    //init_descriptor_tables();
+    //int j = 1/0;
     //vga_clear_screen();
     char *intro_txt = " ____                  _         ___  ____  \n"
                       "/ ___| _ __ ___   ___ | | _____ / _ \\/ ___| \n"
@@ -127,6 +123,9 @@ void kernel_main()
     play_note(E4, 1.5);
     play_note(D4, 0.5);
     play_note(D4, 2);*/
+    //asm volatile ("int $0x0");
+    //sleep(5);
+    //isr0();
     kbd_loop(line + 1);
     //g_write_pixel(100, 100, 1);*/
 

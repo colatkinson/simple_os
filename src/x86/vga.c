@@ -284,18 +284,23 @@ uint32 vga_printf(char *message, uint32 line) // the message and then the line #
     int x = 0;
     while(*message != 0)
     {
-        if(*message == '\n' || x >= g_wd) // check for a new line
+        if(*message == '\n') // check for a new line char
         {
             line++;
             x = 0;
             *message++;
+            continue;
         }
-        else
+
+        if(x >= g_wd/8-1) // check if it would exceed screen width
         {
-            vga_putchar(*message, line, x);
-            *message++;
-            x++;
+            line++;
+            x = 0;
         }
+
+        vga_putchar(*message, line, x);
+        *message++;
+        x++;
     }
 
     return line;
