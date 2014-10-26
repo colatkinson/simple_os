@@ -14,7 +14,7 @@ extern int extmem;
 
 void set_memory();
 
-unsigned char *memcpy(unsigned const char *src, unsigned char *dest, int count);
+unsigned char *memcpy(unsigned const char *src, unsigned char *dest, size_t n);
 unsigned char *memset(unsigned char *dest, unsigned char val, int count);
 unsigned short *memsetw(unsigned short *dest, unsigned short val, int count);
 

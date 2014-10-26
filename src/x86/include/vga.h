@@ -2,6 +2,7 @@
 #include <types.h>
 #include <utils.h>
 #include <u_vga16.h>
+#include <memory.h>
 
 #define inportb(P)      inb(P)
 #define outportb(P,V)       outb(P,V)
@@ -34,7 +35,7 @@
 #define pokeb(S,O,V)        *(unsigned char *)(16uL * (S) + (O)) = (V)
 
 #define BG 0
-#define FG 9
+#define FG 15
 
 int32 g_wd;
 int32 g_ht;
@@ -65,3 +66,4 @@ void vga_putchar(char c, int row, int col);
 void init_graphics(void);
 
 byte_t BackBuffer;
+//unsigned char *double_buffer;

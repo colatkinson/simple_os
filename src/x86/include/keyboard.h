@@ -4,5 +4,6 @@
 #include <vga.h>
 #include <utils.h>
 #include <char_table.h>
+#include <serial.h>
 
 void kbd_loop(int32 line);

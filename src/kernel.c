@@ -101,6 +101,16 @@ void kernel_main()
     //drawchar('w', 100, 100, 9, 15);
     int32 line = vga_printf(intro_txt, 0);
 
+    //vga_iter();
+
+    char *str;
+    str = (char *)malloc(6);
+    str = "jest2";
+
+    line = vga_printf(str, line+1);
+
+    //vga_iter();
+
     //memcpy(get_fb_seg(), double_buffer, 640*480*4);
 
     //memcpy(get_fb_seg(), double_buffer, 640*480*2);

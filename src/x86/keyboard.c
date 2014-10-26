@@ -2,10 +2,14 @@
 
 void kbd_loop(int32 line)
 {
+    init_serial();
     unsigned char c = 0;
-    char *message = (char *)malloc(100 * sizeof(char));
-    int32 i = 0;
+    char *message = (char *)malloc(20*sizeof(char));
+    /*message[0] = 0;
+    message[1] = 0;*/
+    uint32 i = 0;
     int8 shift = 0;
+    int x = 0;
     for (;;)
     {
         if(inb(0x60) != c)
@@ -46,6 +50,34 @@ void kbd_loop(int32 line)
                 }
             }
         }
+            /*if(inb(0x60) != c && !(inb(0x60) & 0x80))
+            {
+                c = inb(0x60);
+                if(char_table[c][0] != 0)
+                {
+                    message[i] = char_table[c][0];
+                    i++;
+                    message[i] = 0;
+                    vga_putchar(char_table[c][0], line, x);
+                    x++;
+                }
+                //vga_printf(message, line);
+            }*/
+
+        /*int j;
+        for(j = 0; j < 20; j++)
+        {
+            if(message[j] == 0)
+            {
+                break;
+            }
+            write_serial('[');
+            write_serial(message[j]);
+            write_serial(']');
+        }
+        write_serial('\n');*/
+        delay_ms(33);
+        vga_iter();
     }
     free(message);
 }
