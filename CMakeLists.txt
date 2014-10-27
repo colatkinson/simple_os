@@ -8,7 +8,7 @@ set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf32")
 enable_language(ASM_NASM)
 
 if(${PLATFORM} STREQUAL "x86")
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32  -fno-builtin -ffreestanding")
+    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -m32  -fno-builtin -ffreestanding -Wunused-macros")
     set(CMAKE_ASM_FLAGS "${CMAKE_C_FLAGS}")
     set(LD_OPTS "-T ${PROJECT_SOURCE_DIR}/link.ld -nostartfiles")
     set(CMAKE_ASM_NASM_OBJECT_FORMAT "elf32")
