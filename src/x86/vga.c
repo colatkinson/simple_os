@@ -147,13 +147,14 @@ void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor)
 {
     int32 cx, cy;
     int32 mask[8] = {1, 2, 4, 8, 16, 32, 64, 128};
-    unsigned char *glyph = ((unsigned char*)__font_bitmap__) + (int32)(c - 31) * 16;
+    //unsigned char *glyph = ((unsigned char*)__font_bitmap__) + (int32)(c - 31) * 16;
+    unsigned char *glyph = ((unsigned char*)__c64_bitmap__) + (int32)(c - 32) * 8;
 
-    for(cy = 0; cy < 16; cy++)
+    for(cy = 0; cy < 8; cy++)
     {
         for(cx = 0; cx < 8; cx++)
         {
-            g_write_pixel(x - cx, y + cy - 12, glyph[cy]&mask[cx] ? fgcolor : bgcolor);
+            g_write_pixel(x - cx, y + cy - 6, glyph[cy]&mask[cx] ? fgcolor : bgcolor);
         }
     }
 }
