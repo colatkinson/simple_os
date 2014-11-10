@@ -1,25 +1,5 @@
 #include <vga.h>
 
-unsigned char g_320x200x4[] =
-{
-    /* MISC */
-    0x63,
-    /* SEQ */
-    0x03, 0x09, 0x03, 0x00, 0x02,
-    /* CRTC */
-    0x2D, 0x27, 0x28, 0x90, 0x2B, 0x80, 0xBF, 0x1F,
-    0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x9C, 0x0E, 0x8F, 0x14, 0x00, 0x96, 0xB9, 0xA3,
-    0xFF,
-    /* GC */
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x30, 0x02, 0x00,
-    0xFF,
-    /* AC */
-    0x00, 0x13, 0x15, 0x17, 0x02, 0x04, 0x06, 0x07,
-    0x10, 0x11, 0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
-    0x01, 0x00, 0x03, 0x00, 0x00
-};
-
 unsigned char g_640x480x16[] =
 {
     /* MISC */
@@ -40,58 +20,9 @@ unsigned char g_640x480x16[] =
     0x01, 0x00, 0x0F, 0x00, 0x00
 };
 
-unsigned char g_320x200x256[] =
-{
-    /* MISC */
-    0x63,
-    /* SEQ */
-    0x03, 0x01, 0x0F, 0x00, 0x0E,
-    /* CRTC */
-    0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
-    0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x9C, 0x0E, 0x8F, 0x28, 0x40, 0x96, 0xB9, 0xA3,
-    0xFF,
-    /* GC */
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
-    0xFF,
-    /* AC */
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-    0x41, 0x00, 0x0F, 0x00, 0x00
-};
-
-unsigned char g_320x200x256_modex[] =
-{
-    /* MISC */
-    0x63,
-    /* SEQ */
-    0x03, 0x01, 0x0F, 0x00, 0x06,
-    /* CRTC */
-    0x5F, 0x4F, 0x50, 0x82, 0x54, 0x80, 0xBF, 0x1F,
-    0x00, 0x41, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
-    0x9C, 0x0E, 0x8F, 0x28, 0x00, 0x96, 0xB9, 0xE3,
-    0xFF,
-    /* GC */
-    0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x05, 0x0F,
-    0xFF,
-    /* AC */
-    0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
-    0x08, 0x09, 0x0A, 0x0B, 0x0C, 0x0D, 0x0E, 0x0F,
-    0x41, 0x00, 0x0F, 0x00, 0x00
-};
-
-//#define MEMSIZE 1008000
-//#define MEMSIZE 640*480*4
-long MEMSIZE = 640*480*3;
-
 byte_t BackBuffer;
-unsigned char *double_buffer;
-unsigned char *double_buffer1;
-unsigned char *double_buffer2;
-unsigned char *double_buffer3;
-unsigned char *double_buffer4;
 
-unsigned get_fb_seg_old(void)
+unsigned get_fb_seg(void)
 {
     unsigned seg;
 
@@ -115,23 +46,14 @@ unsigned get_fb_seg_old(void)
     return seg;
 }
 
-unsigned get_fb_seg(void)
-{
-    unsigned seg;
-    seg = *(&double_buffer1);
-    return seg;
-}
-
 void vpokeb(unsigned off, unsigned val)
 {
     pokeb(get_fb_seg(), off, val);
-    //pokeb(&double_buffer, off, val);
 }
 
 unsigned vpeekb(unsigned off)
 {
     return peekb(get_fb_seg(), off);
-    //return peekb(&double_buffer, off);
 }
 
 void write_regs(unsigned char *regs)
@@ -197,7 +119,7 @@ void set_plane(unsigned p)
     outportb(VGA_SEQ_DATA, pmask);
 }
 
-/*void write_pixel4p_old(unsigned x, unsigned y, unsigned c)
+void write_pixel4p(unsigned x, unsigned y, unsigned c)
 {
     unsigned wd_in_bytes, off, mask, p, pmask;
 
@@ -210,221 +132,41 @@ void set_plane(unsigned p)
     {
         set_plane(p);
         if(pmask & c)
-            vpokeb(off, vpeekb(off) | mask);
-        //pokeb(get_fb_seg(), off, vpeekb(off) | mask);
-        //pokeb(*double_buffer, off, peekb(*double_buffer, off) | mask);
-        //*(unsigned short*)(*double_buffer+off) = vpeekb(off) | mask;
+        {
+            pokeb(seg_val, off, peekb(seg_val, off) | mask);
+        }
         else
-            vpokeb(off, vpeekb(off) & ~mask);
-        //pokeb(*double_buffer, off, peekb(*double_buffer, off) & ~mask);
+        {
+            pokeb(seg_val, off, peekb(seg_val, off) & ~mask);
+        }
         pmask <<= 1;
     }
-    /*unsigned seg = get_fb_seg();
-    ((unsigned*)seg)[(y<<6) + (y<<4) + (x>>2)] = c;*
-}*/
-
-void write_pixel4p(unsigned x, unsigned y, unsigned c)
-{
-    unsigned wd_in_bytes, off, mask, p, pmask;
-
-    wd_in_bytes = g_wd >> 3;
-    off = wd_in_bytes * y + (x >> 3);
-    x = x & 7;
-    mask = 0x80 >> x;
-    pmask = 1;
-    /*for(p = 0; p < 4; p++)
-    {
-        set_plane(p);
-        if(pmask & c)
-            vpokeb(off, vpeekb(off) | mask);
-        //pokeb(get_fb_seg(), off, vpeekb(off) | mask);
-        //pokeb(*double_buffer, off, peekb(*double_buffer, off) | mask);
-        //*(unsigned short*)(*double_buffer+off) = vpeekb(off) | mask;
-        else
-            vpokeb(off, vpeekb(off) & ~mask);
-        //pokeb(*double_buffer, off, peekb(*double_buffer, off) & ~mask);
-        pmask <<= 1;
-    }*/
-    char buffer[5];
-    itoa(x, buffer, 10);
-    int i;
-    for(i = 0; i < 5; i++)
-    {
-        if(buffer[i] == 0)
-        {
-            break;
-        }
-        write_serial(buffer[i]);
-    }
-    write_serial(',');
-    itoa(y, buffer, 10);
-    for(i = 0; i < 5; i++)
-    {
-        if(buffer[i] == 0)
-        {
-            break;
-        }
-        write_serial(buffer[i]);
-    }
-    write_serial(';');
-
-    char buff2[32];
-
-    int db1_loc = &double_buffer1;
-    int db2_loc = &double_buffer2;
-    int db3_loc = &double_buffer3;
-    int db4_loc = &double_buffer4;
-    itoa(db2_loc, buff2, 10);
-    for(i = 0; i < 32; i++)
-    {
-        if(buff2[i] == 0)
-        {
-            break;
-        }
-        write_serial(buff2[i]);
-    }
-    write_serial('|');
-
-    if(pmask & c)
-    {
-        pokeb(*double_buffer1, off, peekb(**(&double_buffer1), off) | mask);
-    }
-    else
-    {
-        pokeb(*double_buffer1, off, peekb(**(&double_buffer1), off) & ~mask);
-    }
-    pmask <<= 1;
-
-    if(pmask & c)
-    {
-        pokeb(*double_buffer2, off, peekb(**(&double_buffer2), off) | mask);
-    }
-    else
-    {
-        pokeb(*double_buffer2, off, peekb(**(&double_buffer2), off) & ~mask);
-    }
-    pmask <<= 1;
-
-    if(pmask & c)
-    {
-        pokeb(*double_buffer3, off, peekb(**(&double_buffer3), off) | mask);
-    }
-    else
-    {
-        pokeb(*double_buffer3, off, peekb(**(&double_buffer3), off) & ~mask);
-    }
-    pmask <<= 1;
-
-    if(pmask & c)
-    {
-        pokeb(*double_buffer4, off, peekb(**(&double_buffer4), off) | mask);
-    }
-    else
-    {
-        pokeb(*double_buffer4, off, peekb(**(&double_buffer4), off) & ~mask);
-    }
-    pmask <<= 1;
-}
-
-void write_pixel2(unsigned x, unsigned y, unsigned c)
-{
-    unsigned wd_in_bytes, off, mask;
-
-    c = (c & 3) * 0x55;
-    wd_in_bytes = g_wd / 4;
-    off = wd_in_bytes * y + x / 4;
-    x = (x & 3) * 2;
-    mask = 0xC0 >> x;
-    vpokeb(off, (vpeekb(off) & ~mask) | (c & mask));
-}
-
-
-
-void write_pixel8(unsigned x, unsigned y, unsigned c)
-{
-    unsigned wd_in_bytes;
-    unsigned off;
-
-    wd_in_bytes = g_wd;
-    off = wd_in_bytes * y + x;
-    vpokeb(off, c);
-}
-
-void write_pixel8x(unsigned x, unsigned y, unsigned c)
-{
-    unsigned wd_in_bytes;
-    unsigned off;
-
-    wd_in_bytes = g_wd >> 2;
-    off = wd_in_bytes * y + (x >> 2);
-    set_plane(x & 3);
-    vpokeb(off, c);
 }
 
 void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor)
 {
-    int cx, cy;
-    int mask[8] = {1, 2, 4, 8, 16, 32, 64, 128};
-    //unsigned char *glyph = ((unsigned char*)__font_bitmap__) + (int)(c - 31) * 16;
-    unsigned char *glyph = ((unsigned char*)vincent_data) + (int)(c) * 8;
+    int32 cx, cy;
+    int32 mask[8] = {1, 2, 4, 8, 16, 32, 64, 128};
+    //unsigned char *glyph = ((unsigned char*)__font_bitmap__) + (int32)(c - 31) * 16;
+    unsigned char *glyph = ((unsigned char*)__c64_bitmap__) + (int32)(c - 32) * 8;
 
     for(cy = 0; cy < 8; cy++)
     {
         for(cx = 0; cx < 8; cx++)
         {
-            //if(glyph[cy]&mask[cx]) g_write_pixel(x-cx,y+cy-12,fgcolor);
-            g_write_pixel(x - cx, y + cy, glyph[cy]&mask[cx] ? fgcolor : bgcolor);
-            //g_write_pixel(x - cx, y + cy, fgcolor);
+            g_write_pixel(x - cx, y + cy - 6, glyph[cy]&mask[cx] ? fgcolor : bgcolor);
         }
     }
 }
 
 void vga_clear_screen() // clear the entire text screen
 {
-    /*int i, j;
-    for(i=0;i<g_wd;i++)
-    {
-        for(j = 0;j<g_ht;j++)
-        {
-            g_write_pixel(i, j, BG);
-        }
-    }*/
-    //memset((unsigned char *)0xA000, 0, 320*200);
-    //fillrect((unsigned char*)0xA000, 1, 1, 1, 200, 200);
-    //memset(double_buffer, (short)15, 640*480*16);
-    //outw(0x3c4, 0xff02);
-    //outb(0x3c5, 0x0f);
-    //memset(get_fb_seg(), BG, MEMSIZE);
-    //memset(double_buffer, BG, 640*480*3);
-    //memset(get_fb_seg_old(), *double_buffer, 640*480*3);
-    memset((void*)double_buffer1, BG, MEMSIZE);
-    memset((void*)double_buffer2, BG, MEMSIZE);
-    memset((void*)double_buffer3, BG, MEMSIZE);
-    memset((void*)double_buffer4, BG, MEMSIZE);
+    outw(0x3c4, 0xff02);
+    memset((void*)get_fb_seg(), BG, 640*480*3);
 }
 
-void vga_iter()
-{
-    //vga_clear_screen();
-    //outw(0x3c4, 0xff02);
-    //memset(get_fb_seg_old(), BG, MEMSIZE);
-    //memset(get_fb_seg_old(), *double_buffer, 640*480*3);
-    //outw(0x3c4, 0xff02);
-    set_plane(0);
-    memcpy((void*)double_buffer1, get_fb_seg_old(), MEMSIZE);
-    set_plane(1);
-    memcpy((void*)double_buffer2, get_fb_seg_old(), MEMSIZE);
-    set_plane(2);
-    memcpy((void*)double_buffer3, get_fb_seg_old(), MEMSIZE);
-    set_plane(3);
-    memcpy((void*)double_buffer4, get_fb_seg_old(), MEMSIZE);
-}
-//memset(get_fb_seg_old(), *double_buffer, 640*480*3);
 void vga_putchar(char c, int row, int col)
 {
-    //char buffer[5];
-    //itoa(col, buffer, 10);
-    //write_serial(buffer[0]);
     drawchar(c, col * 8 + 8, row * 16 + 12, FG, BG);
 }
 
@@ -451,22 +193,16 @@ uint32 vga_printf(char *message, uint32 line) // the message and then the line #
         *message++;
         x++;
     }
-    vga_iter();
 
     return line;
 }
 
 void init_graphics(void)
 {
-    //double_buffer = (unsigned char*)malloc(MEMSIZE);
-    double_buffer1 = (unsigned char*)malloc(MEMSIZE);
-    double_buffer2 = (unsigned char*)malloc(MEMSIZE);
-    double_buffer3 = (unsigned char*)malloc(MEMSIZE);
-    double_buffer4 = (unsigned char*)malloc(MEMSIZE);
-
     write_regs(g_640x480x16);
     g_wd = 640;
     g_ht = 480;
+    seg_val = get_fb_seg();
     g_write_pixel = write_pixel4p;
 
     vga_clear_screen();

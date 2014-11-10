@@ -35,15 +35,12 @@
 #define pokeb(S,O,V)        *(unsigned char *)(16uL * (S) + (O)) = (V)
 
 #define BG 0
-#define FG 15
+#define FG 9
 
 int32 g_wd;
 int32 g_ht;
 
-unsigned char g_320x200x4[];
 unsigned char g_640x480x16[];
-unsigned char g_320x200x256[];
-unsigned char g_320x200x256_modex[];
 
 void vpokeb(unsigned off, unsigned val);
 unsigned vpeekb(unsigned off);
@@ -51,10 +48,7 @@ unsigned vpeekb(unsigned off);
 void write_regs(unsigned char *regs);
 unsigned get_fb_seg(void);
 void set_plane(unsigned p);
-void write_pixel2(unsigned x, unsigned y, unsigned c);
 void write_pixel4p(unsigned x, unsigned y, unsigned c);
-void write_pixel8(unsigned x, unsigned y, unsigned c);
-void write_pixel8x(unsigned x, unsigned y, unsigned c);
 void (*g_write_pixel)(unsigned x, unsigned y, unsigned c);
 
 void drawchar(unsigned char c, int x, int y, int fgcolor, int bgcolor);
@@ -65,5 +59,4 @@ void vga_putchar(char c, int row, int col);
 
 void init_graphics(void);
 
-byte_t BackBuffer;
-//unsigned char *double_buffer;
+unsigned seg_val;
