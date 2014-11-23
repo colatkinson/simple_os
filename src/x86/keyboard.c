@@ -8,6 +8,9 @@ void kbd_loop(int32 line)
     uint32 i = 0;
     int8 shift = 0;
 
+    uint32 pos_x = 0;
+    uint32 pos_y = line;
+
     for (;;)
     {
         if(inb(0x60) != c)
@@ -22,6 +25,12 @@ void kbd_loop(int32 line)
             }
             else
             {
+                if(pos_x > g_wd/8-1)
+                {
+                    pos_x = 0;
+                    pos_y++;
+                }
+
                 if(c == 0x2A)
                 {
                     shift = 1;
@@ -30,21 +39,44 @@ void kbd_loop(int32 line)
                 {
                     if(char_table[c][shift] == 127 && i > 0)
                     {
+                        if(pos_x <= 0)
+                        {
+                            pos_x = i % (g_wd / 8) - 1;
+                            if(pos_x <= 0)
+                                pos_x = g_wd/8;
+                            pos_y--;
+                        }
+
                         message[i] = 0;
                         i--;
+                        pos_x--;
                         message[i] = ' ';
+
+                        //i++;
                         //vga_printf(message, line);
+                        vga_putchar(message[i], pos_y, pos_x);
                     }
                     else
                     {
                         message[i] = char_table[c][shift];
                         i++;
+                        pos_x++;
                         message[i] = 0;
                         //vga_printf(message, line);
+                        if(message[i-1] == '\n')
+                        {
+                            pos_x = 0;
+                            pos_y++;
+                        }
+                        else
+                        {
+                            vga_putchar(message[i-1], pos_y, pos_x-1);
+                        }
                     }
                     //message[i] = 0;
                     //message[i+1] = 0;
-                    vga_printf(message, line);
+                    //vga_printf(message, line);
+                    //vga_putchar(message[i-1], line, i);
                 }
             }
         }
